@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace IOPriorityGuard
+namespace IOPriorityGuard.Native
 {
     internal enum PROCESS_INFORMATION_CLASS
     {
@@ -100,7 +100,6 @@ namespace IOPriorityGuard
         internal static extern SafeProcessHandle OpenProcess(int access, bool inherit, int processId);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool CloseHandle(IntPtr hObject);
 
         [DllImport("ntdll.dll", SetLastError = true)]

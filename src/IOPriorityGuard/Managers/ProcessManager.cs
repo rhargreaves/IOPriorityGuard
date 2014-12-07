@@ -1,12 +1,15 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using IOPriorityGuard.Interfaces;
+using IOPriorityGuard.Model;
 using IOPriorityGuard.Native;
 
 namespace IOPriorityGuard.Managers
 {
-    public class ProcessIoManager : IProcessIoManager
+    public class ProcessManager : IProcessManager
     {
         internal static SafeProcessHandle OpenProcess(Process proc, PROCESS_RIGHTS processRights)
         {
@@ -19,7 +22,23 @@ namespace IOPriorityGuard.Managers
             return hProcess;
         }
 
-        public void SetIoPriority(Process process, IoPriority ioPriorityLevel)
+        public IList<Process> GetRunningProcesses(IEnumerable<string> processNames)
+        {
+            var processes = new List<Process>();
+            foreach (var processName in processNames)
+            {
+                var friendlyName = Path.GetFileNameWithoutExtension(processName);
+                processes.AddRange(Process.GetProcessesByName(friendlyName));
+            }
+            return processes;
+        }
+
+        public void SetProcessPriority(Process process, ProcessPriorityClass priorityClass)
+        {
+            process.PriorityClass = priorityClass;
+        }
+
+        public void SetDiskIoPriority(Process process, DiskIoPriorityClass ioPriorityLevel)
         {
             using (var hProcess = OpenProcess(process, PROCESS_RIGHTS.PROCESS_ALL_ACCESS))
             {
@@ -39,7 +58,7 @@ namespace IOPriorityGuard.Managers
             }
         }
 
-        public IoPriority GetIoPrority(Process process)
+        public DiskIoPriorityClass GetDiskIoPrority(Process process)
         {
             using (var hProcess = OpenProcess(process, PROCESS_RIGHTS.PROCESS_ALL_ACCESS))
             {
@@ -52,7 +71,7 @@ namespace IOPriorityGuard.Managers
                         gcHandle.AddrOfPinnedObject(), sizeof(uint), ref sizeOfResult);
                     if (retVal != 0)
                         throw new Win32Exception(retVal);
-                    return (IoPriority) ioPriorityLevel;
+                    return (DiskIoPriorityClass) ioPriorityLevel;
                 }
                 finally
                 {

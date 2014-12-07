@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("IOPriorityGuard")]
-[assembly: AssemblyDescription("Monitors and lowers the IO priority of specific processes.")]
+[assembly: AssemblyDescription("Monitors and lowers the disk IO priority of specific processes.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Robert Hargreaves")]
 [assembly: AssemblyProduct("IOPriorityGuard")]
@@ -34,3 +34,5 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: InternalsVisibleTo("IOPriorityGuard.Tests")]

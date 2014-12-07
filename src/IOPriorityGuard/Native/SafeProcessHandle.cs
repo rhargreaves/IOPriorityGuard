@@ -18,13 +18,14 @@ using System.Security;
 using System.Security.Permissions;
 using Microsoft.Win32.SafeHandles;
 
-namespace IOPriorityGuard
+namespace IOPriorityGuard.Native
 {
     [HostProtection(MayLeakOnAbort = true)]
     [SuppressUnmanagedCodeSecurity]
     internal sealed class SafeProcessHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         internal static SafeProcessHandle InvalidHandle = new SafeProcessHandle(IntPtr.Zero);
+
         internal SafeProcessHandle() : base(true) { }
 
         [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
